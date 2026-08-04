@@ -1,10 +1,10 @@
 [build]
   publish = "frontend/dist"
-  command = "cd frontend && npm install && npm run build && cd ../backend && npm install"
+  command = "npm install --prefix frontend && npm run build --prefix frontend && npm install --prefix backend"
 
 [functions]
   directory = "backend/netlify/functions"
-  node_bundler = "esbuild"
+  node_bundler = "zisi"
 
 [[redirects]]
   from = "/api/*"
