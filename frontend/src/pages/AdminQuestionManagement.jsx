@@ -14,7 +14,7 @@ const AdminQuestionManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentQ, setCurrentQ] = useState({
-    text: '', options: { A: '', B: '', C: '', D: '' }, correctAnswer: 'A', rubric: '', marks: 1
+    text: '', imageUrl: '', options: { A: '', B: '', C: '', D: '' }, correctAnswer: 'A', rubric: '', marks: 1
   });
   
   const fileInputRef = useRef(null);
@@ -108,16 +108,19 @@ const AdminQuestionManagement = () => {
       data = [
         {
           Question: 'Explain the concept of Object-Oriented Programming.',
+          'Image URL': '',
           Rubric: 'encapsulation, inheritance, polymorphism, abstraction',
           Marks: 5
         },
         {
           Question: 'What is a binary search tree?',
+          'Image URL': '',
           Rubric: 'sorted nodes, left smaller right larger, O(log n) search',
           Marks: 3
         },
         {
           Question: 'Describe the difference between TCP and UDP.',
+          'Image URL': '',
           Rubric: 'connection-oriented, reliability, speed, handshake',
           Marks: 5
         }
@@ -127,6 +130,7 @@ const AdminQuestionManagement = () => {
       data = [
         {
           Question: 'What does CPU stand for?',
+          'Image URL': '',
           OptionA: 'Central Processing Unit',
           OptionB: 'Central Program Utility',
           OptionC: 'Computer Personal Unit',
@@ -136,6 +140,7 @@ const AdminQuestionManagement = () => {
         },
         {
           Question: 'Which data structure uses LIFO order?',
+          'Image URL': '',
           OptionA: 'Queue',
           OptionB: 'Stack',
           OptionC: 'Array',
@@ -145,6 +150,7 @@ const AdminQuestionManagement = () => {
         },
         {
           Question: 'What is the time complexity of binary search?',
+          'Image URL': 'https://example.com/binary_search_graph.png',
           OptionA: 'O(n)',
           OptionB: 'O(n²)',
           OptionC: 'O(log n)',
@@ -174,7 +180,7 @@ const AdminQuestionManagement = () => {
 
   const openNewModal = () => {
     setIsEditing(false);
-    setCurrentQ({ text: '', options: { A: '', B: '', C: '', D: '' }, correctAnswer: 'A', rubric: '', marks: 1 });
+    setCurrentQ({ text: '', imageUrl: '', options: { A: '', B: '', C: '', D: '' }, correctAnswer: 'A', rubric: '', marks: 1 });
     setShowModal(true);
   };
 
@@ -237,7 +243,14 @@ const AdminQuestionManagement = () => {
                     <span className="bg-gray-200 text-gray-700 text-xs font-bold px-2 py-1 rounded mr-3">Q{idx + 1}</span>
                     <span className="ml-1 text-sm text-gray-500 font-medium">{q.marks} Mark(s)</span>
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">{q.text}</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">
+                    {q.text}
+                    {q.imageUrl && (
+                      <a href={q.imageUrl} target="_blank" rel="noreferrer" className="inline-block ml-2 text-blue-500 hover:text-blue-700" title="View Image">
+                        🖼️
+                      </a>
+                    )}
+                  </h3>
                   
                   {quiz?.quizType === 'Descriptive' ? (
                     <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700">
@@ -281,6 +294,10 @@ const AdminQuestionManagement = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Question Text</label>
                   <textarea required rows="3" className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQ.text} onChange={e => setCurrentQ({...currentQ, text: e.target.value})}></textarea>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (Optional)</label>
+                  <input type="url" placeholder="https://..." className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQ.imageUrl || ''} onChange={e => setCurrentQ({...currentQ, imageUrl: e.target.value})} />
                 </div>
                 
                 {quiz?.quizType === 'Descriptive' ? (

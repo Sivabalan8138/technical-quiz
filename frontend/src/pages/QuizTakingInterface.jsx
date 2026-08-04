@@ -275,9 +275,19 @@ const QuizTakingInterface = () => {
               </span>
             </div>
             
-            <p className="text-xl text-gray-900 font-medium mb-8 leading-relaxed">
+            <p className="text-xl text-gray-900 font-medium mb-6 leading-relaxed">
               {currentQuestion.text}
             </p>
+            
+            {currentQuestion.imageUrl && (
+              <div className="mb-8 flex justify-center bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <img 
+                  src={currentQuestion.imageUrl} 
+                  alt="Question Attachment" 
+                  className="max-h-96 object-contain rounded-lg shadow-sm"
+                />
+              </div>
+            )}
             
             {quiz.quizType === 'Descriptive' ? (
               <div className="flex flex-col h-full mt-4">

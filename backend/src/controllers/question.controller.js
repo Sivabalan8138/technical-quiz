@@ -98,6 +98,7 @@ exports.bulkUploadQuestions = async (req, res) => {
           questions.push({
             quiz: quizId,
             text: row.Question || row.text,
+            imageUrl: row['Image URL'] || row.ImageURL || row.Image || null,
             options: {
               A: row.OptionA || row['Option A'] || row.A,
               B: row.OptionB || row['Option B'] || row.B,
@@ -123,6 +124,7 @@ exports.bulkUploadQuestions = async (req, res) => {
         questions.push({
           quiz: quizId,
           text: row.Question || row.text,
+          imageUrl: row['Image URL'] || row.ImageURL || row.Image || null,
           options: {
             A: row.OptionA || row['Option A'] || row.A,
             B: row.OptionB || row['Option B'] || row.B,

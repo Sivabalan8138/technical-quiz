@@ -10,6 +10,10 @@ const QuestionSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a question text']
   },
+  imageUrl: {
+    type: String,
+    default: null
+  },
   options: {
     A: { type: String },
     B: { type: String },
