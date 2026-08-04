@@ -44,7 +44,7 @@ const AdminQuizManagement = () => {
 
     try {
       if (isEditing) {
-        await api.put(`/quizzes/${currentQuiz._id}`, payload);
+        await api.put(`/quiz-detail?id=${currentQuiz._id}`, payload);
         toast.success('Quiz updated successfully');
       } else {
         await api.post('/quizzes', payload);
@@ -60,7 +60,7 @@ const AdminQuizManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this quiz?')) {
       try {
-        await api.delete(`/quizzes/${id}`);
+        await api.delete(`/quiz-detail?id=${id}`);
         toast.success('Quiz deleted successfully');
         fetchQuizzes();
       } catch (error) {

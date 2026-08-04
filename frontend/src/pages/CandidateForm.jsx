@@ -22,7 +22,7 @@ const CandidateForm = () => {
   useEffect(() => {
     const fetchQuizDetails = async () => {
       try {
-        const res = await api.get(`/quizzes/${quizId}`);
+        const res = await api.get(`/quiz-detail?id=${quizId}`);
         setQuizDetails(res.data.data);
       } catch (err) {
         setLocalError('Quiz not found or is currently unavailable.');

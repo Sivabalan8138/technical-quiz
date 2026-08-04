@@ -27,8 +27,8 @@ const AdminQuestionManagement = () => {
   const fetchQuizAndQuestions = async () => {
     try {
       const [quizRes, qRes] = await Promise.all([
-        api.get(`/quizzes/${quizId}`),
-        api.get(`/quizzes/${quizId}/questions`)
+        api.get(`/quiz-detail?id=${quizId}`),
+        api.get(`/questions?quizId=${quizId}`)
       ]);
       setQuiz(quizRes.data.data);
       setQuestions(qRes.data.data);
@@ -41,7 +41,7 @@ const AdminQuestionManagement = () => {
 
   const fetchQuestions = async () => {
     try {
-      const res = await api.get(`/quizzes/${quizId}/questions`);
+      const res = await api.get(`/questions?quizId=${quizId}`);
       setQuestions(res.data.data);
     } catch (error) {
       console.error(error);
@@ -52,10 +52,10 @@ const AdminQuestionManagement = () => {
     e.preventDefault();
     try {
       if (isEditing) {
-        await api.put(`/questions/${currentQ._id}`, currentQ);
+        await api.put(`/question-detail?id=${currentQ._id}`, currentQ);
         toast.success('Question updated successfully!');
       } else {
-        await api.post(`/quizzes/${quizId}/questions`, currentQ);
+        await api.post(`/questions?quizId=${quizId}`, currentQ);
         toast.success('Question added successfully!');
       }
       setShowModal(false);
@@ -68,7 +68,7 @@ const AdminQuestionManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this question?')) {
       try {
-        await api.delete(`/questions/${id}`);
+        await api.delete(`/question-detail?id=${id}`);
         toast.success('Question deleted');
         fetchQuestions();
       } catch (error) {
@@ -86,7 +86,7 @@ const AdminQuestionManagement = () => {
     
     setUploading(true);
     try {
-      await api.post(`/quizzes/${quizId}/questions/bulk`, formData, {
+      await api.post(`/question-bulk?quizId=${quizId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       toast.success('Questions uploaded successfully!');

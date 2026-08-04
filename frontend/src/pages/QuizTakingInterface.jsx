@@ -25,8 +25,8 @@ const QuizTakingInterface = () => {
     const initQuiz = async () => {
       try {
         const [quizRes, qRes] = await Promise.all([
-          api.get(`/quizzes/${quizId}`),
-          api.get(`/quizzes/${quizId}/questions`)
+          api.get(`/quiz-detail?id=${quizId}`),
+          api.get(`/questions?quizId=${quizId}`)
         ]);
         
         setQuiz(quizRes.data.data);
@@ -175,7 +175,7 @@ const QuizTakingInterface = () => {
     const timeTaken = (quiz.duration * 60) - timeLeft;
 
     try {
-      const res = await api.post(`/quizzes/${quizId}/submit`, { 
+      const res = await api.post(`/quiz-submit?id=${quizId}`, { 
         answers: mappedAnswers,
         timeTaken
       });

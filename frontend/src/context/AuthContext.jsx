@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
         if (decoded.exp * 1000 < Date.now()) {
           logout();
         } else {
-          const res = await api.get('/auth/me');
+          const res = await api.get('/auth-me');
           setUser(res.data?.data || null);
         }
       } catch (err) {
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const endpoint = '/auth/admin/login';
+      const endpoint = '/auth-admin-login';
       const res = await api.post(endpoint, { email, password });
       
       localStorage.setItem('token', res.data.token);
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
 
   const candidateStart = async (name, registerNumber, department, year) => {
     try {
-      const res = await api.post('/auth/candidate-start', { name, registerNumber, department, year });
+      const res = await api.post('/auth-candidate-start', { name, registerNumber, department, year });
       localStorage.setItem('token', res.data.token);
       setUser(res.data.user);
       setError(null);
