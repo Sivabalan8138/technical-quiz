@@ -1,15 +1,7 @@
 [build]
-  publish = "frontend/dist"
-  command = "npm install --prefix frontend && npm run build --prefix frontend && npm install --prefix backend"
-
-[functions]
-  directory = "backend/netlify/functions"
-  node_bundler = "zisi"
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
+  base = "frontend"
+  publish = "dist"
+  command = "npm install && npm run build"
 
 [[redirects]]
   from = "/*"
