@@ -12,7 +12,7 @@ const Home = () => {
     const fetchQuizzes = async () => {
       try {
         const res = await api.get('/quizzes');
-        setQuizzes(res.data.data);
+        setQuizzes(res.data?.data || []);
       } catch (err) {
         console.error('Failed to fetch quizzes', err);
       } finally {

@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
           logout();
         } else {
           const res = await api.get('/auth/me');
-          setUser(res.data.data);
+          setUser(res.data?.data || null);
         }
       } catch (err) {
         logout();

@@ -50,11 +50,17 @@ const admin = require('./src/routes/admin.routes');
 const quiz = require('./src/routes/quiz.routes');
 const question = require('./src/routes/question.routes');
 
-// Mount routers
-app.use('/api/v1/auth', auth);
-app.use('/api/v1/admin', admin);
-app.use('/api/v1/quizzes', quiz);
-app.use('/api/v1/questions', question);
+const router = express.Router();
+router.use('/auth', auth);
+router.use('/admin', admin);
+router.use('/quizzes', quiz);
+router.use('/questions', question);
+
+// Mount router for both local dev and Netlify functions
+app.use('/api/v1', router);
+app.use('/.netlify/functions/api/v1', router);
+// Also try to match without v1 just in case
+app.use('/.netlify/functions/api/api/v1', router);
 
 app.get('/', (req, res) => {
   res.send('TechQuiz API is running');
