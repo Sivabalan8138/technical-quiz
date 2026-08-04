@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Technical Quiz Application",
   "scripts": {
-    "build:frontend": "cd frontend && npm install && npm run build"
+    "build": "node vercel-build.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
