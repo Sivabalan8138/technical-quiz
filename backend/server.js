@@ -6,9 +6,6 @@ const connectDB = require('./src/config/db');
 // Load env vars
 dotenv.config();
 
-// Connect to database
-connectDB();
-
 const User = require('./src/models/User');
 
 const seedAdmin = async () => {
@@ -28,7 +25,12 @@ const seedAdmin = async () => {
   }
 };
 
-seedAdmin();
+// Connect to database
+connectDB().then(() => {
+  seedAdmin();
+}).catch(err => {
+  console.error('Failed to connect to database before seeding', err);
+});
 
 const app = express();
 
@@ -36,7 +38,11 @@ const app = express();
 app.use(express.json());
 
 // Enable CORS
-app.use(cors());
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || '*',
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 // Route files
 const auth = require('./src/routes/auth.routes');
@@ -54,8 +60,12 @@ app.get('/', (req, res) => {
   res.send('TechQuiz API is running');
 });
 
-const PORT = process.env.PORT || 5000;
+module.exports = app;
 
-app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+// Add local server startup
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  });
+}
