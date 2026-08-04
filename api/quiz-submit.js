@@ -1,29 +1,29 @@
-const { protect } = require('../../backend/src/utils/auth');
-const connectDB = require('../../backend/src/config/db');
-const Quiz = require('../../backend/src/models/Quiz');
-const Question = require('../../backend/src/models/Question');
-const Result = require('../../backend/src/models/Result');
-const { evaluateDescriptiveAnswer } = require('../../backend/src/utils/aiService');
+const { protect } = require('../backend/src/utils/auth');
+const connectDB = require('../backend/src/config/db');
+const Quiz = require('../backend/src/models/Quiz');
+const Question = require('../backend/src/models/Question');
+const Result = require('../backend/src/models/Result');
+const { evaluateDescriptiveAnswer } = require('../backend/src/utils/aiService');
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: JSON.stringify({ success: false, error: 'Method Not Allowed' }) };
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ success: false, error: 'Method Not Allowed' });
   }
 
   try {
     await connectDB();
-    const user = await protect(event);
-    const quizId = event.queryStringParameters.id;
+    const user = await protect(req);
+    const quizId = req.query.id;
 
     if (!quizId) {
-      return { statusCode: 400, body: JSON.stringify({ success: false, error: 'quizId is required' }) };
+      return res.status(400).json({ success: false, error: 'quizId is required' });
     }
 
-    const body = JSON.parse(event.body || '{}');
+    const body = req.body || {};
     const { answers, timeTaken } = body;
     
     const quiz = await Quiz.findById(quizId);
-    if (!quiz) return { statusCode: 404, body: JSON.stringify({ success: false, error: 'Quiz not found' }) };
+    if (!quiz) return res.status(404).json({ success: false, error: 'Quiz not found' });
 
     const questions = await Question.find({ quiz: quizId });
     
@@ -129,21 +129,15 @@ exports.handler = async (event, context) => {
 
     const result = await Result.create(resultPayload);
 
-    return {
-      statusCode: 201,
-      body: JSON.stringify({
-        success: true,
-        data: {
-          score: result.score,
-          percentage: result.percentage,
-          message: 'Your quiz has been submitted successfully.'
-        }
-      })
-    };
+    return res.status(201).json({
+      success: true,
+      data: {
+        score: result.score,
+        percentage: result.percentage,
+        message: 'Your quiz has been submitted successfully.'
+      }
+    });
   } catch (err) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ success: false, error: err.message })
-    };
+    return res.status(400).json({ success: false, error: err.message });
   }
 };

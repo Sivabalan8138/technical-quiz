@@ -1,28 +1,20 @@
-const { protect, authorize } = require('../../backend/src/utils/auth');
-const connectDB = require('../../backend/src/config/db');
-const Question = require('../../backend/src/models/Question');
+const { protect, authorize } = require('../backend/src/utils/auth');
+const connectDB = require('../backend/src/config/db');
+const Question = require('../backend/src/models/Question');
 const busboy = require('busboy');
 const csv = require('csv-parser');
 const xlsx = require('xlsx');
 const streamifier = require('streamifier');
 
-const parseMultipartForm = (event) => {
+const parseMultipartForm = (req) => {
   return new Promise((resolve, reject) => {
-    const bb = busboy({
-      headers: {
-        ...event.headers,
-        'content-type': event.headers['content-type'] || event.headers['Content-Type']
-      }
-    });
-
+    const bb = busboy({ headers: req.headers });
     let uploadedFile = null;
 
     bb.on('file', (name, file, info) => {
       const { filename, encoding, mimeType } = info;
       const chunks = [];
-      file.on('data', (data) => {
-        chunks.push(data);
-      });
+      file.on('data', (data) => chunks.push(data));
       file.on('end', () => {
         uploadedFile = {
           filename,
@@ -33,38 +25,32 @@ const parseMultipartForm = (event) => {
       });
     });
 
-    bb.on('finish', () => {
-      resolve(uploadedFile);
-    });
+    bb.on('finish', () => resolve(uploadedFile));
+    bb.on('error', (err) => reject(err));
 
-    bb.on('error', (err) => {
-      reject(err);
-    });
-
-    bb.write(Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'binary'));
-    bb.end();
+    req.pipe(bb);
   });
 };
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: JSON.stringify({ success: false, error: 'Method Not Allowed' }) };
+const handler = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ success: false, error: 'Method Not Allowed' });
   }
 
   try {
     await connectDB();
-    const user = await protect(event);
+    const user = await protect(req);
     authorize(user, 'Admin');
 
-    const quizId = event.queryStringParameters.quizId;
+    const quizId = req.query.quizId;
     if (!quizId) {
-      return { statusCode: 400, body: JSON.stringify({ success: false, error: 'quizId is required' }) };
+      return res.status(400).json({ success: false, error: 'quizId is required' });
     }
 
-    const file = await parseMultipartForm(event);
+    const file = await parseMultipartForm(req);
 
     if (!file) {
-      return { statusCode: 400, body: JSON.stringify({ success: false, error: 'Please upload a file' }) };
+      return res.status(400).json({ success: false, error: 'Please upload a file' });
     }
 
     const questions = [];
@@ -94,7 +80,7 @@ exports.handler = async (event, context) => {
       });
       
       await Question.insertMany(questions);
-      return { statusCode: 201, body: JSON.stringify({ success: true, count: questions.length, data: 'Questions uploaded successfully' }) };
+      return res.status(201).json({ success: true, count: questions.length, data: 'Questions uploaded successfully' });
     } else if (filename.endsWith('.xlsx') || filename.endsWith('.xls')) {
       const workbook = xlsx.read(file.buffer, { type: 'buffer' });
       const sheetName = workbook.SheetNames[0];
@@ -118,14 +104,18 @@ exports.handler = async (event, context) => {
       });
 
       await Question.insertMany(questions);
-      return { statusCode: 201, body: JSON.stringify({ success: true, count: questions.length, data: 'Questions uploaded successfully' }) };
+      return res.status(201).json({ success: true, count: questions.length, data: 'Questions uploaded successfully' });
     } else {
-      return { statusCode: 400, body: JSON.stringify({ success: false, error: 'Invalid file format' }) };
+      return res.status(400).json({ success: false, error: 'Invalid file format' });
     }
   } catch (err) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ success: false, error: err.message })
-    };
+    return res.status(400).json({ success: false, error: err.message });
   }
+};
+
+module.exports = handler;
+module.exports.config = {
+  api: {
+    bodyParser: false,
+  },
 };

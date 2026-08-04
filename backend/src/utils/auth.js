@@ -3,13 +3,13 @@ const User = require('../models/User');
 const connectDB = require('../config/db');
 
 // Helper to extract JWT token and get user
-exports.protect = async (event) => {
+exports.protect = async (req) => {
   await connectDB();
   
   let token;
   
   // The header might be 'Authorization' or 'authorization'
-  const authHeader = event.headers.authorization || event.headers.Authorization;
+  const authHeader = req.headers.authorization || req.headers.Authorization;
   
   if (authHeader && authHeader.startsWith('Bearer')) {
     token = authHeader.split(' ')[1];

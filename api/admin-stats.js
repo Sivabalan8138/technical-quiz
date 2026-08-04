@@ -1,18 +1,18 @@
-const { protect, authorize } = require('../../backend/src/utils/auth');
-const connectDB = require('../../backend/src/config/db');
-const User = require('../../backend/src/models/User');
-const Quiz = require('../../backend/src/models/Quiz');
-const Question = require('../../backend/src/models/Question');
-const Result = require('../../backend/src/models/Result');
+const { protect, authorize } = require('../backend/src/utils/auth');
+const connectDB = require('../backend/src/config/db');
+const User = require('../backend/src/models/User');
+const Quiz = require('../backend/src/models/Quiz');
+const Question = require('../backend/src/models/Question');
+const Result = require('../backend/src/models/Result');
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod !== 'GET') {
-    return { statusCode: 405, body: JSON.stringify({ success: false, error: 'Method Not Allowed' }) };
+module.exports = async (req, res) => {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ success: false, error: 'Method Not Allowed' });
   }
 
   try {
     await connectDB();
-    const user = await protect(event);
+    const user = await protect(req);
     authorize(user, 'Admin');
 
     const totalStudents = await User.countDocuments({ role: 'Student' });
@@ -62,24 +62,18 @@ exports.handler = async (event, context) => {
       });
     }
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        success: true,
-        data: {
-          totalStudents,
-          totalQuizzes,
-          totalQuestions,
-          completedTests,
-          recentActivity,
-          submissionTrends
-        }
-      })
-    };
+    return res.status(200).json({
+      success: true,
+      data: {
+        totalStudents,
+        totalQuizzes,
+        totalQuestions,
+        completedTests,
+        recentActivity,
+        submissionTrends
+      }
+    });
   } catch (err) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({ success: false, error: err.message })
-    };
+    return res.status(401).json({ success: false, error: err.message });
   }
 };

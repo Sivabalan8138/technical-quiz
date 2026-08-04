@@ -1,0 +1,19 @@
+{
+  "name": "technical-quiz",
+  "version": "1.0.0",
+  "description": "Technical Quiz Application",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "vercel-build": "cd frontend && npm install && npm run build"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "busboy": "^1.6.0",
+    "csv-parser": "^3.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.9.1",
+    "openai": "^7.4.0",
+    "streamifier": "^0.1.1",
+    "xlsx": "^0.18.5"
+  }
+}
