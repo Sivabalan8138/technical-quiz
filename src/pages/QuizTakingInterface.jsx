@@ -20,6 +20,7 @@ const QuizTakingInterface = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState(null); // { score, percentage }
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(true);
 
   // Enter fullscreen on mount, exit on unmount
   useEffect(() => {
@@ -212,24 +213,44 @@ const QuizTakingInterface = () => {
     return () => clearInterval(timer);
   }, [timeLeft, quiz, result, isSubmitting, handleSubmitQuiz]);
 
-  // Anti-cheat: Warn and Auto-submit on tab change
+  // Anti-cheat: Warn and Auto-submit on tab change or fullscreen exit
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden && !result && !isSubmitting && quiz) {
+    const handleViolation = (violationType) => {
+      if (!result && !isSubmitting && quiz) {
         setTabSwitchCount(prev => {
           const newCount = prev + 1;
           if (newCount === 1) {
-            toast.error('WARNING: Tab switching is strictly prohibited! If you switch tabs again, your quiz will be auto-submitted.', { duration: 6000 });
+            toast.error(`WARNING: ${violationType} is strictly prohibited! If you do it again, your quiz will be auto-submitted.`, { duration: 6000 });
           } else if (newCount >= 2) {
-            toast.error('Quiz auto-submitted due to repeated tab switching!');
+            toast.error(`Quiz auto-submitted due to repeated ${violationType.toLowerCase()}!`);
             handleSubmitQuiz();
           }
           return newCount;
         });
       }
     };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        handleViolation('Tab switching');
+      }
+    };
+
+    const handleFullscreenChange = () => {
+      const isFull = !!document.fullscreenElement;
+      setIsFullscreen(isFull);
+      if (!isFull) {
+        handleViolation('Exiting fullscreen');
+      }
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
   }, [result, isSubmitting, handleSubmitQuiz, quiz]);
 
   const handleOptionSelect = (questionId, selectedKeyOrText) => {
@@ -273,6 +294,37 @@ const QuizTakingInterface = () => {
               Return to Home
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Fullscreen Enforcer Overlay
+  if (!isFullscreen) {
+    return (
+      <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-gray-900 px-4 fixed inset-0 z-50">
+        <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-2xl text-center border-t-4 border-red-500">
+          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <AlertTriangle className="text-red-600 w-10 h-10" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Fullscreen Required</h2>
+          <p className="text-gray-700 mb-6">You must take this quiz in fullscreen mode. Please return to fullscreen to continue.</p>
+          <button 
+            onClick={async () => {
+              try {
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) await elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) await elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) await elem.msRequestFullscreen();
+                setIsFullscreen(true);
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors w-full"
+          >
+            Return to Fullscreen
+          </button>
         </div>
       </div>
     );
