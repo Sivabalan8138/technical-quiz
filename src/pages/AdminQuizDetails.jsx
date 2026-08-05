@@ -23,8 +23,8 @@ const AdminQuizDetails = () => {
     try {
       const [quizRes, resData, anData] = await Promise.all([
         api.get(`/quiz-detail?id=${quizId}`),
-        api.get(`/admin-quiz-results?quizId=${quizId}`),
-        api.get(`/admin-quiz-analytics?quizId=${quizId}`)
+        api.get(`/admin?action=quiz-results&quizId=${quizId}`),
+        api.get(`/admin?action=quiz-analytics&quizId=${quizId}`)
       ]);
       setQuiz(quizRes.data.data);
       setResults(resData.data.data);
