@@ -4,7 +4,7 @@ import api from '../utils/api';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { Download, BarChart2, Users, ArrowLeft, Award, Clock, AlertCircle } from 'lucide-react';
+import { Download, BarChart2, Users, ArrowLeft, Award, Clock, AlertCircle, Trash2 } from 'lucide-react';
 
 const AdminQuizDetails = () => {
   const { quizId } = useParams();
@@ -33,6 +33,17 @@ const AdminQuizDetails = () => {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteResult = async (resultId) => {
+    if (!window.confirm("Are you sure you want to delete this result?")) return;
+    try {
+      await api.delete(`/admin?action=delete-result&resultId=${resultId}`);
+      fetchData(); // Refresh the table and analytics
+    } catch (error) {
+      console.error(error);
+      alert('Failed to delete result');
     }
   };
 
@@ -170,6 +181,7 @@ const AdminQuizDetails = () => {
                   )}
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Time</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Date</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -212,10 +224,19 @@ const AdminQuizDetails = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {new Date(r.completedAt).toLocaleString()}
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                      <button 
+                        onClick={() => handleDeleteResult(r._id)}
+                        className="text-red-500 hover:text-red-700 transition-colors bg-red-50 dark:bg-red-900/20 p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/40"
+                        title="Delete Result"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
                   </tr>
                 ))}
                 {results.length === 0 && (
-                  <tr><td colSpan="7" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No submissions yet.</td></tr>
+                  <tr><td colSpan="10" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No submissions yet.</td></tr>
                 )}
               </tbody>
             </table>

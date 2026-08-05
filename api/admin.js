@@ -6,7 +6,7 @@ const Question = require('../backend/src/models/Question');
 const Result = require('../backend/src/models/Result');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'GET') {
+  if (req.method !== 'GET' && req.method !== 'DELETE') {
     return res.status(405).json({ success: false, error: 'Method Not Allowed' });
   }
 
@@ -106,6 +106,12 @@ module.exports = async (req, res) => {
           questionStats
         }
       });
+    }
+    if (req.method === 'DELETE' && action === 'delete-result') {
+      const { resultId } = req.query;
+      if (!resultId) return res.status(400).json({ success: false, error: 'resultId is required' });
+      await Result.findByIdAndDelete(resultId);
+      return res.status(200).json({ success: true, message: 'Result deleted successfully' });
     }
 
     return res.status(400).json({ success: false, error: 'Invalid action parameter' });
