@@ -102,41 +102,6 @@ const QuizTakingInterface = () => {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [result]);
 
-  // Timer countdown
-  useEffect(() => {
-    if (timeLeft <= 0) {
-      if (quiz && !result && !isSubmitting) {
-        handleSubmitQuiz();
-      }
-      return;
-    }
-    
-    const timer = setInterval(() => {
-      setTimeLeft(prev => prev - 1);
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, [timeLeft, quiz, result, isSubmitting, handleSubmitQuiz]);
-
-  const handleOptionSelect = (questionId, selectedKeyOrText) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: selectedKeyOrText
-    }));
-  };
-
-  const toggleReviewMark = () => {
-    setMarkedForReview(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(currentQuestionIndex)) {
-        newSet.delete(currentQuestionIndex);
-      } else {
-        newSet.add(currentQuestionIndex);
-      }
-      return newSet;
-    });
-  };
-
   const handleSubmitQuiz = useCallback(async () => {
     // Validate Word Limits for Descriptive Quizzes
     if (quiz?.quizType === 'Descriptive' && quiz?.wordLimits) {
@@ -196,7 +161,44 @@ const QuizTakingInterface = () => {
     } finally {
       setIsSubmitting(false);
     }
-  }, [answers, questions, quizId]);
+  }, [answers, questions, quizId, quiz, timeLeft]);
+
+  // Timer countdown
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      if (quiz && !result && !isSubmitting) {
+        handleSubmitQuiz();
+      }
+      return;
+    }
+    
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [timeLeft, quiz, result, isSubmitting, handleSubmitQuiz]);
+
+  const handleOptionSelect = (questionId, selectedKeyOrText) => {
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: selectedKeyOrText
+    }));
+  };
+
+  const toggleReviewMark = () => {
+    setMarkedForReview(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(currentQuestionIndex)) {
+        newSet.delete(currentQuestionIndex);
+      } else {
+        newSet.add(currentQuestionIndex);
+      }
+      return newSet;
+    });
+  };
+
+
 
   if (!quiz || questions.length === 0) return <div className="p-8 text-center">Loading quiz interface...</div>;
 
