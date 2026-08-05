@@ -44,8 +44,7 @@ const AdminLogin = () => {
               <input
                 type="email"
                 required
-                className="block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-gray-700 text-white placeholder-gray-400"
-                placeholder="admin@example.com"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-gray-700 text-white"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -61,8 +60,7 @@ const AdminLogin = () => {
               <input
                 type="password"
                 required
-                className="block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-gray-700 text-white placeholder-gray-400"
-                placeholder="••••••••"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-gray-700 text-white"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
