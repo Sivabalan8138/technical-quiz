@@ -123,7 +123,7 @@ const AdminQuizDetails = () => {
       </div>
 
       {analytics && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">Total Registrations</p>
             <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{analytics.totalRegistrations || 0}</p>
@@ -135,10 +135,6 @@ const AdminQuizDetails = () => {
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">Average Score</p>
             <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{analytics.averageScore || 0}</p>
-          </div>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-            <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">Pass Percentage</p>
-            <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">{analytics.passPercentage || 0}%</p>
           </div>
         </div>
       )}

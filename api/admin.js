@@ -70,8 +70,15 @@ module.exports = async (req, res) => {
     if (action === 'quiz-analytics') {
       if (!quizId) return res.status(400).json({ success: false, error: 'quizId is required' });
       
-      const totalRegistrations = await User.countDocuments({ role: 'Student', quizId });
       const results = await Result.find({ quiz: quizId });
+      
+      const completedUserIds = [...new Set(results.map(r => r.user.toString()))];
+      const registeredOnlyCount = await User.countDocuments({ 
+        role: 'Student', 
+        quizId: quizId,
+        _id: { $nin: completedUserIds } 
+      });
+      const totalRegistrations = completedUserIds.length + registeredOnlyCount;
       
       if (results.length === 0) {
         return res.status(200).json({ success: true, data: { message: 'No submissions yet.', totalRegistrations, totalSubmissions: 0 } });
