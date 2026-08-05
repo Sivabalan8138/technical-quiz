@@ -434,7 +434,7 @@ const QuizTakingInterface = () => {
             })}
           </div>
           
-          <div className="space-y-3 border-t border-gray-100 pt-4 text-sm">
+          <div className="space-y-3 border-t border-gray-100 pt-4 text-sm text-gray-700">
             <div className="flex items-center"><div className="w-4 h-4 bg-green-100 border border-green-500 rounded mr-3"></div> Answered</div>
             <div className="flex items-center"><div className="w-4 h-4 bg-white border border-gray-300 rounded mr-3"></div> Not Answered / Skipped</div>
             <div className="flex items-center"><div className="w-4 h-4 bg-purple-100 border border-purple-400 rounded mr-3"></div> Marked for Review</div>
