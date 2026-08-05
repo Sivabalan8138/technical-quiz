@@ -225,7 +225,7 @@ const AdminQuizDetails = () => {
 
       {view === 'analytics' && analytics && (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col items-center justify-center text-center">
               <Award className="text-yellow-500 mb-2" size={32} />
               <p className="text-sm text-gray-500 dark:text-gray-400 uppercase font-medium">Highest Score</p>
@@ -240,11 +240,6 @@ const AdminQuizDetails = () => {
               <AlertCircle className="text-red-500 mb-2" size={32} />
               <p className="text-sm text-gray-500 dark:text-gray-400 uppercase font-medium">Lowest Score</p>
               <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{analytics.lowestScore || 0}</h3>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col items-center justify-center text-center">
-              <Users className="text-green-500 mb-2" size={32} />
-              <p className="text-sm text-gray-500 dark:text-gray-400 uppercase font-medium">Pass Percentage</p>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{analytics.passPercentage || 0}%</h3>
             </div>
           </div>
           
