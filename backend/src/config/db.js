@@ -15,9 +15,18 @@ const connectDB = async () => {
       throw new Error('MONGO_URI is missing or contains the <db_password> placeholder.');
     }
 
-    const conn = await mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+    // Remove unsupported options from connection string if present
+    let cleanMongoUri = mongoUri;
+    try {
+      const parsedUrl = new URL(mongoUri);
+      parsedUrl.searchParams.delete('useNewUrlParser');
+      parsedUrl.searchParams.delete('useUnifiedTopology');
+      cleanMongoUri = parsedUrl.toString();
+    } catch (err) {
+      // ignore parsing errors and let mongoose throw if invalid
+    }
+
+    const conn = await mongoose.connect(cleanMongoUri, {
       serverSelectionTimeoutMS: 5000
     });
     
