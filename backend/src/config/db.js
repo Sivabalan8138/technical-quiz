@@ -19,8 +19,11 @@ const connectDB = async () => {
     let cleanMongoUri = mongoUri;
     try {
       const parsedUrl = new URL(mongoUri);
-      parsedUrl.searchParams.delete('useNewUrlParser');
-      parsedUrl.searchParams.delete('useUnifiedTopology');
+      for (const key of Array.from(parsedUrl.searchParams.keys())) {
+        if (key.toLowerCase() === 'usenewurlparser' || key.toLowerCase() === 'useunifiedtopology') {
+          parsedUrl.searchParams.delete(key);
+        }
+      }
       cleanMongoUri = parsedUrl.toString();
     } catch (err) {
       // ignore parsing errors and let mongoose throw if invalid
