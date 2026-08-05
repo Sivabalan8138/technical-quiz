@@ -21,6 +21,38 @@ const QuizTakingInterface = () => {
   const [result, setResult] = useState(null); // { score, percentage }
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
 
+  // Enter fullscreen on mount, exit on unmount
+  useEffect(() => {
+    const enterFullscreen = async () => {
+      try {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          await elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+          await elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+          await elem.msRequestFullscreen();
+        }
+      } catch (err) {
+        console.error("Error attempting to enable fullscreen:", err);
+      }
+    };
+
+    enterFullscreen();
+
+    return () => {
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(err => console.error(err));
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    };
+  }, []);
+
   // Fetch quiz and questions
   useEffect(() => {
     const initQuiz = async () => {
@@ -144,6 +176,17 @@ const QuizTakingInterface = () => {
         score: res.data.data.score,
         percentage: res.data.data.percentage
       });
+
+      // Exit fullscreen
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(err => console.error(err));
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
       
     } catch (err) {
       console.error(err);
