@@ -69,8 +69,13 @@ module.exports = async (req, res) => {
 
     if (action === 'quiz-analytics') {
       if (!quizId) return res.status(400).json({ success: false, error: 'quizId is required' });
+      
+      const totalRegistrations = await User.countDocuments({ role: 'Student', quizId });
       const results = await Result.find({ quiz: quizId });
-      if (results.length === 0) return res.status(200).json({ success: true, data: { message: 'No submissions yet.' } });
+      
+      if (results.length === 0) {
+        return res.status(200).json({ success: true, data: { message: 'No submissions yet.', totalRegistrations, totalSubmissions: 0 } });
+      }
 
       const scores = results.map(r => r.score);
       const passedCount = results.filter(r => r.passed).length;
@@ -85,6 +90,7 @@ module.exports = async (req, res) => {
       return res.status(200).json({
         success: true,
         data: {
+          totalRegistrations,
           totalSubmissions: results.length,
           highestScore: Math.max(...scores),
           lowestScore: Math.min(...scores),

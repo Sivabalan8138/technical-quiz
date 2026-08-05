@@ -37,7 +37,7 @@ const CandidateForm = () => {
     e.preventDefault();
     setLocalError('');
     try {
-      await candidateStart(name, registerNumber, department, year);
+      await candidateStart(name, registerNumber, department, year, quizId);
       navigate(`/quiz/${quizId}`); // Proceeds directly to take the quiz
     } catch (err) {
       setLocalError(err.response?.data?.error || 'Failed to start quiz. Please try again.');

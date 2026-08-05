@@ -24,6 +24,11 @@ const UserSchema = new mongoose.Schema({
     enum: ['Student', 'Admin'],
     default: 'Student'
   },
+  quizId: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Quiz',
+    required: false
+  },
   email: {
     type: String,
     required: function() { return this.role === 'Admin'; },

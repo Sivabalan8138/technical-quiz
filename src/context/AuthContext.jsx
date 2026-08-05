@@ -47,9 +47,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const candidateStart = async (name, registerNumber, department, year) => {
+  const candidateStart = async (name, registerNumber, department, year, quizId) => {
     try {
-      const res = await api.post('/auth-candidate-start', { name, registerNumber, department, year });
+      const res = await api.post('/auth-candidate-start', { name, registerNumber, department, year, quizId });
       localStorage.setItem('token', res.data.token);
       setUser(res.data.user);
       setError(null);

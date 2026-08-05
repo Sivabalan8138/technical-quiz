@@ -9,9 +9,9 @@ module.exports = async (req, res) => {
 
   try {
     await connectDB();
-    const { name, registerNumber, department, year } = req.body || {};
+    const { name, registerNumber, department, year, quizId } = req.body || {};
 
-    if (!name || !registerNumber || !department || !year) {
+    if (!name || !registerNumber || !department || !year || !quizId) {
       return res.status(400).json({ success: false, error: 'Please provide all details' });
     }
 
@@ -20,6 +20,7 @@ module.exports = async (req, res) => {
       registerNumber,
       department,
       year,
+      quizId,
       role: 'Student'
     });
 

@@ -296,8 +296,33 @@ const AdminQuestionManagement = () => {
                   <textarea required rows="3" className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQ.text} onChange={e => setCurrentQ({...currentQ, text: e.target.value})}></textarea>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (Optional)</label>
-                  <input type="url" placeholder="https://..." className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQ.imageUrl || ''} onChange={e => setCurrentQ({...currentQ, imageUrl: e.target.value})} />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Question Image (Optional)</label>
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 bg-white" 
+                    onChange={e => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        if (file.size > 2 * 1024 * 1024) return alert('Image size must be less than 2MB');
+                        const reader = new FileReader();
+                        reader.onloadend = () => setCurrentQ({...currentQ, imageUrl: reader.result});
+                        reader.readAsDataURL(file);
+                      }
+                    }} 
+                  />
+                  {currentQ.imageUrl && (
+                    <div className="mt-2 relative inline-block">
+                      <img src={currentQ.imageUrl} alt="Preview" className="h-20 object-contain rounded border border-gray-200 bg-gray-50" />
+                      <button 
+                        type="button"
+                        onClick={() => setCurrentQ({...currentQ, imageUrl: ''})}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-md hover:bg-red-600 focus:outline-none"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  )}
                 </div>
                 
                 {quiz?.quizType === 'Descriptive' ? (
