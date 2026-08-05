@@ -19,6 +19,7 @@ const QuizTakingInterface = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState(null); // { score, percentage }
+  const [tabSwitchCount, setTabSwitchCount] = useState(0);
 
   // Fetch quiz and questions
   useEffect(() => {
@@ -90,17 +91,6 @@ const QuizTakingInterface = () => {
     document.addEventListener('contextmenu', handleContextMenu);
     return () => document.removeEventListener('contextmenu', handleContextMenu);
   }, []);
-
-  // Anti-cheat: Warn on tab change
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden && !result) {
-        toast.error('WARNING: Tab switching is strictly prohibited! Your quiz may be auto-submitted if you continue.');
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [result]);
 
   const handleSubmitQuiz = useCallback(async () => {
     // Validate Word Limits for Descriptive Quizzes
@@ -178,6 +168,26 @@ const QuizTakingInterface = () => {
     
     return () => clearInterval(timer);
   }, [timeLeft, quiz, result, isSubmitting, handleSubmitQuiz]);
+
+  // Anti-cheat: Warn and Auto-submit on tab change
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && !result && !isSubmitting && quiz) {
+        setTabSwitchCount(prev => {
+          const newCount = prev + 1;
+          if (newCount === 1) {
+            toast.error('WARNING: Tab switching is strictly prohibited! If you switch tabs again, your quiz will be auto-submitted.', { duration: 6000 });
+          } else if (newCount >= 2) {
+            toast.error('Quiz auto-submitted due to repeated tab switching!');
+            handleSubmitQuiz();
+          }
+          return newCount;
+        });
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [result, isSubmitting, handleSubmitQuiz, quiz]);
 
   const handleOptionSelect = (questionId, selectedKeyOrText) => {
     setAnswers(prev => ({
