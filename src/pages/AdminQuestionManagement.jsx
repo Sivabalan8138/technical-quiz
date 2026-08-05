@@ -293,14 +293,14 @@ const AdminQuestionManagement = () => {
               <form onSubmit={handleSave} className="space-y-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Question Text</label>
-                  <textarea required rows="3" className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQ.text} onChange={e => setCurrentQ({...currentQ, text: e.target.value})}></textarea>
+                  <textarea required rows="3" className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900" value={currentQ.text} onChange={e => setCurrentQ({...currentQ, text: e.target.value})}></textarea>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Question Image (Optional)</label>
                   <input 
                     type="file" 
                     accept="image/*"
-                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 bg-white" 
+                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900" 
                     onChange={e => {
                       const file = e.target.files[0];
                       if (file) {
@@ -328,7 +328,7 @@ const AdminQuestionManagement = () => {
                 {quiz?.quizType === 'Descriptive' ? (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">AI Evaluation Rubric / Keywords (Optional)</label>
-                    <textarea rows="3" placeholder="Enter keywords or guidelines that the AI should look for when evaluating this answer..." className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQ.rubric} onChange={e => setCurrentQ({...currentQ, rubric: e.target.value})}></textarea>
+                    <textarea rows="3" placeholder="Enter keywords or guidelines that the AI should look for when evaluating this answer..." className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900" value={currentQ.rubric} onChange={e => setCurrentQ({...currentQ, rubric: e.target.value})}></textarea>
                   </div>
                 ) : (
                   <>
@@ -336,7 +336,7 @@ const AdminQuestionManagement = () => {
                       {['A', 'B', 'C', 'D'].map(opt => (
                         <div key={opt} className="flex items-center">
                           <span className="font-bold text-gray-500 w-8">{opt}.</span>
-                          <input type="text" required className="flex-grow border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQ.options?.[opt] || ''} onChange={e => setCurrentQ({...currentQ, options: {...currentQ.options, [opt]: e.target.value}})} />
+                          <input type="text" required className="flex-grow border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900" value={currentQ.options?.[opt] || ''} onChange={e => setCurrentQ({...currentQ, options: {...currentQ.options, [opt]: e.target.value}})} />
                         </div>
                       ))}
                     </div>
@@ -344,7 +344,7 @@ const AdminQuestionManagement = () => {
                     <div className="grid grid-cols-2 gap-4 border-t border-gray-100 pt-5">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Correct Answer</label>
-                        <select className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 bg-white" value={currentQ.correctAnswer} onChange={e => setCurrentQ({...currentQ, correctAnswer: e.target.value})}>
+                        <select className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900" value={currentQ.correctAnswer} onChange={e => setCurrentQ({...currentQ, correctAnswer: e.target.value})}>
                           <option value="A">Option A</option>
                           <option value="B">Option B</option>
                           <option value="C">Option C</option>
@@ -353,7 +353,7 @@ const AdminQuestionManagement = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Marks</label>
-                        <input type="number" required min="1" className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQ.marks} onChange={e => setCurrentQ({...currentQ, marks: e.target.value})} />
+                        <input type="number" required min="1" className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900" value={currentQ.marks} onChange={e => setCurrentQ({...currentQ, marks: e.target.value})} />
                       </div>
                     </div>
                   </>
