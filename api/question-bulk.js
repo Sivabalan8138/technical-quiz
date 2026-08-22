@@ -26,6 +26,7 @@ const parseMultipartForm = (req) => {
     });
 
     bb.on('finish', () => resolve(uploadedFile));
+    bb.on('close', () => resolve(uploadedFile));
     bb.on('error', (err) => reject(err));
 
     req.pipe(bb);

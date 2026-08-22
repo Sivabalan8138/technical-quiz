@@ -129,11 +129,11 @@ const AdminDashboard = () => {
                 <div key={index} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                   <div className="flex items-center mb-1">
                     <span className="font-semibold text-gray-900 dark:text-white mr-2">
-                      {activity.user.name} {activity.user.registerNumber ? `(${activity.user.registerNumber})` : ''}
+                      {activity.user?.name || 'Unknown User'} {activity.user?.registerNumber ? `(${activity.user.registerNumber})` : ''}
                     </span>
                     <span className="text-sm text-gray-500 dark:text-gray-400">completed</span>
                   </div>
-                  <div className="font-medium text-blue-600 dark:text-blue-400 mb-2">{activity.quiz.title}</div>
+                  <div className="font-medium text-blue-600 dark:text-blue-400 mb-2">{activity.quiz?.title || 'Deleted Quiz'}</div>
                   <div className="flex justify-between items-center text-sm">
                     <span className={`font-bold ${activity.percentage >= 50 ? 'text-green-600' : 'text-red-600'}`}>
                       Score: {activity.score} ({activity.percentage}%)
