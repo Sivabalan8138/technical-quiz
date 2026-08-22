@@ -52,10 +52,10 @@ const AdminQuizDetails = () => {
 
     const exportData = results.map((r, idx) => ({
       'S.No': idx + 1,
-      'Name': r.user.name,
-      'Register Number': r.user.registerNumber || 'N/A',
-      'Year': r.user.year || 'N/A',
-      'Department': r.user.department || 'N/A',
+      'Name': r.user?.name || 'Unknown',
+      'Register Number': r.user?.registerNumber || 'N/A',
+      'Year': r.user?.year || 'N/A',
+      'Department': r.user?.department || 'N/A',
       'Mark Scored': r.score
     }));
 
@@ -83,10 +83,10 @@ const AdminQuizDetails = () => {
     const tableColumn = ['S.No', 'Name', 'Register Number', 'Year', 'Department', 'Mark Scored'];
     const tableRows = results.map((r, idx) => [
       idx + 1,
-      r.user.name,
-      r.user.registerNumber || 'N/A',
-      r.user.year || 'N/A',
-      r.user.department || 'N/A',
+      r.user?.name || 'Unknown',
+      r.user?.registerNumber || 'N/A',
+      r.user?.year || 'N/A',
+      r.user?.department || 'N/A',
       r.score
     ]);
 
@@ -193,11 +193,11 @@ const AdminQuizDetails = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="font-medium text-gray-900 dark:text-white">{r.user.name}</div>
+                      <div className="font-medium text-gray-900 dark:text-white">{r.user?.name || 'Unknown'}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{r.user.registerNumber || '-'}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{r.user.year || '-'}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{r.user.department || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{r.user?.registerNumber || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{r.user?.year || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{r.user?.department || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <div className="font-bold text-gray-900 dark:text-white">{r.score}</div>
                       <div className={`text-xs font-medium ${r.percentage >= 50 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>{r.percentage}%</div>
@@ -210,7 +210,7 @@ const AdminQuizDetails = () => {
                     {quiz?.quizType === 'Descriptive' && (
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
                         {r.aiFeedback ? (
-                          <button onClick={() => setSelectedFeedback({ user: r.user.name, feedback: r.aiFeedback })} className="text-blue-600 dark:text-blue-400 hover:underline">
+                          <button onClick={() => setSelectedFeedback({ user: r.user?.name || 'Unknown', feedback: r.aiFeedback })} className="text-blue-600 dark:text-blue-400 hover:underline">
                             View Report
                           </button>
                         ) : (
