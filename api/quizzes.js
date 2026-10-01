@@ -8,6 +8,8 @@ module.exports = async (req, res) => {
 
     if (req.method === 'GET') {
       const quizzes = await Quiz.find();
+      // Cache at edge for 60 seconds, serve stale while revalidating for another 120 seconds
+      res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120');
       return res.status(200).json({ success: true, count: quizzes.length, data: quizzes });
     } 
     

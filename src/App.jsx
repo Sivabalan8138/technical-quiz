@@ -26,7 +26,7 @@ function App() {
             <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-gray-900 transition-colors duration-200">
               <Toaster position="top-right" />
               <Navbar />
-              <main className="flex-grow">
+              <main className="grow">
                 <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Navigate to="/admin/login" replace />} />

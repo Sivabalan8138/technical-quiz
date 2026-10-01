@@ -70,6 +70,10 @@ const QuizTakingInterface = () => {
         
         // Randomize options for each question
         const randomizedQs = shuffledQs.map(q => {
+          if (quizRes.data.data.quizType === 'Descriptive' || !q.options) {
+            return q;
+          }
+
           const optionsKeys = ['A', 'B', 'C', 'D'];
           const shuffledKeys = [...optionsKeys].sort(() => Math.random() - 0.5);
           
@@ -370,11 +374,11 @@ const QuizTakingInterface = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6 flex-grow flex flex-col lg:flex-row gap-6 w-full">
+      <div className="max-w-7xl mx-auto px-4 py-6 grow flex flex-col lg:flex-row gap-6 w-full">
         
         {/* Main Question Area */}
-        <div className="flex-grow flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-6 flex-grow">
+        <div className="grow flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="p-6 grow">
             <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
               <h2 className="text-lg font-semibold text-gray-500">Question {currentQuestionIndex + 1} of {questions.length}</h2>
               <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium">
