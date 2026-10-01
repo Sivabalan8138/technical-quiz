@@ -115,7 +115,7 @@ const AdminQuizManagement = () => {
               <tr key={quiz._id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                    <div className="shrink-0 h-10 w-10 bg-indigo-100 rounded-lg flex items-center justify-center">
                       <BookOpen className="h-5 w-5 text-indigo-600" />
                     </div>
                     <div className="ml-4">
@@ -175,24 +175,24 @@ const AdminQuizManagement = () => {
               <form onSubmit={handleSave} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Quiz Title</label>
-                  <input type="text" required className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQuiz.title} onChange={e => setCurrentQuiz({...currentQuiz, title: e.target.value})} />
+                  <input type="text" required className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500" value={currentQuiz.title} onChange={e => setCurrentQuiz({...currentQuiz, title: e.target.value})} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-                  <textarea required rows="3" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQuiz.description} onChange={e => setCurrentQuiz({...currentQuiz, description: e.target.value})}></textarea>
+                  <textarea required rows="3" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500" value={currentQuiz.description} onChange={e => setCurrentQuiz({...currentQuiz, description: e.target.value})}></textarea>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-                    <input type="text" required className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQuiz.category} onChange={e => setCurrentQuiz({...currentQuiz, category: e.target.value})} />
+                    <input type="text" required className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500" value={currentQuiz.category} onChange={e => setCurrentQuiz({...currentQuiz, category: e.target.value})} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Duration (minutes)</label>
-                    <input type="number" required min="1" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQuiz.duration} onChange={e => setCurrentQuiz({...currentQuiz, duration: e.target.value})} />
+                    <input type="number" required min="1" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500" value={currentQuiz.duration} onChange={e => setCurrentQuiz({...currentQuiz, duration: e.target.value})} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Total Marks</label>
-                    <input type="number" required min="1" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQuiz.totalMarks} onChange={e => setCurrentQuiz({...currentQuiz, totalMarks: e.target.value})} />
+                    <input type="number" required min="1" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500" value={currentQuiz.totalMarks} onChange={e => setCurrentQuiz({...currentQuiz, totalMarks: e.target.value})} />
                   </div>
 
                 </div>
@@ -203,7 +203,7 @@ const AdminQuizManagement = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Quiz Type</label>
                       <select 
-                        className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" 
+                        className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500" 
                         value={currentQuiz.quizType} 
                         onChange={e => setCurrentQuiz({...currentQuiz, quizType: e.target.value})}
                       >
@@ -229,11 +229,11 @@ const AdminQuizManagement = () => {
                     <div className="grid grid-cols-2 gap-4 mt-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Min Words per Question</label>
-                        <input type="number" min="0" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQuiz.wordLimits?.min || 0} onChange={e => setCurrentQuiz({...currentQuiz, wordLimits: {...currentQuiz.wordLimits, min: parseInt(e.target.value)}})} />
+                        <input type="number" min="0" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500" value={currentQuiz.wordLimits?.min || 0} onChange={e => setCurrentQuiz({...currentQuiz, wordLimits: {...currentQuiz.wordLimits, min: parseInt(e.target.value)}})} />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Max Words per Question</label>
-                        <input type="number" min="1" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500" value={currentQuiz.wordLimits?.max || 1000} onChange={e => setCurrentQuiz({...currentQuiz, wordLimits: {...currentQuiz.wordLimits, max: parseInt(e.target.value)}})} />
+                        <input type="number" min="1" className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-2.5 focus:ring-blue-500" value={currentQuiz.wordLimits?.max || 1000} onChange={e => setCurrentQuiz({...currentQuiz, wordLimits: {...currentQuiz.wordLimits, max: parseInt(e.target.value)}})} />
                       </div>
                     </div>
                   )}
