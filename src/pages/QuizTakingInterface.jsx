@@ -11,6 +11,7 @@ const QuizTakingInterface = () => {
   
   const [quiz, setQuiz] = useState(null);
   const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   // State for quiz taking
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -107,6 +108,8 @@ const QuizTakingInterface = () => {
         console.error("Error loading quiz", error);
         toast.error("Failed to load quiz.");
         navigate('/');
+      } finally {
+        setIsLoading(false);
       }
     };
     initQuiz();
@@ -278,7 +281,8 @@ const QuizTakingInterface = () => {
 
 
 
-  if (!quiz || questions.length === 0) return <div className="p-8 text-center">Loading quiz interface...</div>;
+  if (isLoading) return <div className="min-h-screen bg-slate-900 flex items-center justify-center text-slate-300">Loading quiz interface...</div>;
+  if (!quiz || questions.length === 0) return <div className="min-h-screen bg-slate-900 flex items-center justify-center text-red-400">This quiz has no questions currently available. Please contact the administrator.</div>;
 
   // Result View (Post-submission)
   if (result) {
